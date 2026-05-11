@@ -116,7 +116,7 @@ auto then(Next&& next) &&
 
 末尾的 `&&` 使其成为右值限定的成员函数——只能通过 `std::move(cb).then(next)` 或临时对象 `.then(next)` 调用。如果调用方写了 `cb.then(next)`（左值调用），编译器直接报"没有匹配的重载函数"。这是表达消费语义的另一种方式——和 `run()` 用 deducing this 不同，`then()` 不需要区分左值和右值给出不同的错误信息，直接用 ref-qualifier 更简洁。
 
-### std::decay_t<Next>：退化去掉引用
+### std::decay_t\<Next\>：退化去掉引用
 
 ```cpp
 using NextType = std::decay_t<Next>;

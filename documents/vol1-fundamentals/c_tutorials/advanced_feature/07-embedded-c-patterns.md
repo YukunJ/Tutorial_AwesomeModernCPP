@@ -402,7 +402,7 @@ __attribute__((weak)) void HardFault_Handler(void) { default_handler(); }
 
 链接脚本告诉链接器程序的内存布局——Flash 从哪到哪、SRAM 从哪到哪、各段分别放哪里。关键概念是 `> RAM AT > FLASH`——`.data` 段的运行地址在 RAM，但加载地址在 Flash。上电后启动代码把它拷贝到 RAM。`.bss` 段只有起始和结束地址，启动代码直接清零。
 
-```ld
+```c
 /* link.ld — Cortex-M3 最小链接脚本 */
 MEMORY
 {

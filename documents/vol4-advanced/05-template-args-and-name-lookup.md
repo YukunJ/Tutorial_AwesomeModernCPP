@@ -962,8 +962,7 @@ int main() {
 }
 ```
 
-<details>
-<summary>完整可运行示例：泛型迭代器工具包</summary>
+::: details 完整可运行示例：泛型迭代器工具包
 
 ```cpp
 #include <iostream>
@@ -1121,9 +1120,10 @@ int main() {
 
     return 0;
 }
+
 ```
 
-</details>
+:::
 
 ------
 
@@ -1132,6 +1132,7 @@ int main() {
 ### 陷阱1：依赖名称与两阶段查找
 
 ```cpp
+
 template<typename T>
 void process(T t) {
     // 阶段1：编译器检查 clear 是否作为非依赖名称存在

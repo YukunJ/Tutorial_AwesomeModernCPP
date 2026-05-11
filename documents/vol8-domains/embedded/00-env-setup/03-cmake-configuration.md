@@ -290,7 +290,7 @@ add_link_options(
 
 首先是 MEMORY 定义：
 
-```ld
+```c
 MEMORY
 {
   FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 128K
@@ -302,7 +302,7 @@ MEMORY
 
 接下来是 SECTIONS 定义，这是最关键的部分：
 
-```ld
+```c
 ENTRY(Reset_Handler)
 
 SECTIONS
@@ -337,7 +337,7 @@ SECTIONS
 
 最后是堆栈设置：
 
-```ld
+```c
 _stack_start = ORIGIN(RAM) + LENGTH(RAM);
 _stack_end = _stack_start - 0x400;  /* 1KB stack */
 

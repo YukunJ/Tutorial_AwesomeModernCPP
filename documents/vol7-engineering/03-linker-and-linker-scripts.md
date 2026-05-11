@@ -97,7 +97,7 @@ void main() {
 
 **MEMORY 区域定义** 定义物理内存区域的名称、起始地址和长度。例如：
 
-```ld
+```c
 MEMORY {
   FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 512K
   RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
@@ -107,7 +107,7 @@ MEMORY {
 
 **SECTIONS 输出节定义** 告诉链接器把各个输入节（来自目标文件）如何组织成输出节，并放到哪个 MEMORY 区域：
 
-```ld
+```c
 SECTIONS {
   .text : { *(.text*) } > FLASH
   .data : { *(.data*) } > RAM
@@ -144,7 +144,7 @@ SECTIONS {
 
 ### 3.1 最小可用链接脚本
 
-```ld
+```c
 /* minimal-arm.ld - ARM Cortex-M 最小链接脚本 */
 
 /* 指定程序入口点 */
@@ -342,7 +342,7 @@ private:
 
 确保链接脚本正确处理 C++ 相关的节：
 
-```ld
+```c
 .text : {
     /* ... */
     KEEP(*(.init_array*))    /* 构造函数指针数组 */
@@ -409,7 +409,7 @@ uint8_t buffer[10240];
 
 **技巧 3：使用 `ASSERT` 进行约束检查**
 
-```ld
+```c
 SECTIONS {
     .text : { /* ... */ } > FLASH
     ASSERT(SIZEOF(.text) < 0x7E000, "代码段超出 FLASH 空间")

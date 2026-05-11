@@ -161,7 +161,7 @@ concept not_the_same_t = !std::is_same_v<std::decay_t<F>, T>;
 
 它做的事情用一句话说就是：**F 退化后的类型不是 T**。我们逐个拆解里面的三个关键组件。
 
-### std::decay_t<F>：退化掉引用和 cv 限定符
+### std::decay_t\<F\>：退化掉引用和 cv 限定符
 
 `std::decay_t` 对类型做三件事：去掉引用（`int&` → `int`）、去掉顶层 const/volatile（`const int` → `int`）、数组和函数类型退化（`int[5]` → `int*`，`int(int)` → `int(*)(int)`）。
 

@@ -320,6 +320,6 @@ std::vector<std::string> lines = {
 
 > **参考资源**
 >
-> - [cppreference: <algorithm>](https://en.cppreference.com/w/cpp/algorithm)
-> - [cppreference: <numeric>](https://en.cppreference.com/w/cpp/header/numeric)
+> - [cppreference: \<algorithm\>](https://en.cppreference.com/w/cpp/algorithm)
+> - [cppreference: \<numeric\>](https://en.cppreference.com/w/cpp/header/numeric)
 > - [cppreference: Lambda expressions](https://en.cppreference.com/w/cpp/language/lambda)
