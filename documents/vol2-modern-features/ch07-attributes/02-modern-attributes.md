@@ -240,7 +240,7 @@ static_assert(sizeof(single_thread_buf) == sizeof(void*) + sizeof(std::size_t) *
 
 // 多线程版本：std::mutex 占实际空间
 ThreadSafeBuffer<int, StdMutex> multi_thread_buf;
-// sizeof 包含 std::mutex 的大小
+static_assert(sizeof(multi_thread_buf) == sizeof(std::mutex) + sizeof(void*) + sizeof(std::size_t) * 2);
 ```
 
 这个设计让你在不牺牲内存效率的前提下，通过模板参数灵活切换策略。单线程场景下不浪费一个字节，多线程场景下使用真正的互斥锁。
