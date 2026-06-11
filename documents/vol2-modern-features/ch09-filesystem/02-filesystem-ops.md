@@ -205,16 +205,19 @@ fs::copy("/tmp/source_dir", "/tmp/dest_dir",
          fs::copy_options::overwrite_existing);
 ```
 
-`fs::copy_file(from, to, options)` 是专门用于文件复制的函数。它和 `copy` 的区别在于：`copy_file` 只处理普通文件，而且提供了更精细的控制。⚠️ 注意：`copy_file` **不提供原子性保证**——如果复制过程中失败（如磁盘空间不足、断电等），目标文件可能处于部分写入状态。如需原子性，应使用"复制到临时文件 + 原子重命名"模式。
+`fs::copy_file(from, to, options)` 是专门用于文件复制的函数。它和 `copy` 的区别在于：`copy_file` 只处理普通文件，而且提供了更精细的控制。⚠️ 注意：`copy_file` **不提供原子性保证**——如果复制过程中失败（如磁盘空间不足、断电等），目标文件可能处于部分写入状态。如需原子性，应使用"复制到临时文件 + 原子重命名"模式。(参见"临时文件处理部分"的`safe_write_file`函数范例)
 
 ```cpp
-// 安全的文件复制（原子性保证）
+// 不安全的文件复制（无原子性保证）
 fs::path src = "/data/important_config.yaml";
 fs::path dst = "/backup/important_config.yaml";
 
 std::error_code ec;
 fs::copy_file(src, dst,
               fs::copy_options::overwrite_existing, ec);
+// 可能性1. 如果 dst 已经存在, 复制过程中内容可能会被逐步覆盖, 
+// 从而导致其他进程看到一个被部分复制的文件
+// 可能性2. 如果复制中途停电宕机, dst文件可能处于不完整甚至损坏的状态
 if (ec) {
     std::cerr << "复制失败: " << ec.message() << "\n";
 } else {
