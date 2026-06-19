@@ -75,6 +75,13 @@ def discover_projects(code_root: Path, target: str) -> list[Path]:
         if 'build' in cmake_file.parts or '.cache' in cmake_file.parts:
             continue
 
+        # vol5-labs 练习手册特殊结构:
+        #   templates/ 是空实现骨架(给初学者拷贝,不该 CI build);
+        #   examples/ 是 standalone 参考实现(由顶层 vol5-labs/CMakeLists.txt 统一 add_subdirectory)。
+        # 跳过这两类 standalone CMakeLists, 只 build 顶层 vol5-labs/(它编译已完成的 example)。
+        if 'vol5-labs' in cmake_file.parts and ('templates' in cmake_file.parts or 'examples' in cmake_file.parts):
+            continue
+
         project_dir = cmake_file.parent
 
         # Skip projects that are subdirectories of other CMake projects
@@ -155,6 +162,25 @@ def build_project(project_dir: Path) -> BuildResult:
     except subprocess.TimeoutExpired:
         success = False
         all_output.append('Build timed out (300s)')
+
+    # 跑测试(仅当工程配了 CTest: build_dir 里有 CTestTestfile.cmake)。
+    # 没配 CTest 的工程(大多数纯示例)直接跳过, 不算失败。
+    if success and (build_dir / 'CTestTestfile.cmake').exists():
+        ctest_cmd = ['ctest', '--test-dir', str(build_dir),
+                     '--output-on-failure', '--timeout', '60']
+        try:
+            ct = subprocess.run(ctest_cmd, cwd=str(project_dir),
+                                capture_output=True, text=True, timeout=180)
+            all_output.append('--- ctest ---')
+            all_output.append(ct.stdout)
+            all_output.append(ct.stderr)
+            if ct.returncode != 0:
+                success = False
+        except subprocess.TimeoutExpired:
+            all_output.append('ctest timed out (180s)')
+            success = False
+        except FileNotFoundError:
+            pass  # 环境没 ctest, 跳过
 
     duration = time.time() - start
 
